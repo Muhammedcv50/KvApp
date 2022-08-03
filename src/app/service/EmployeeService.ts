@@ -2,7 +2,7 @@ import { plainToClass } from "class-transformer";
 import { Employee } from "../entities/Employee";
 import EntityNotFoundException from "../exception/EntityNotFoundException";
 import HttpException from "../exception/HttpException";
-import { EmployeeRespository } from "../repository/employeeRepository";
+import { EmployeeRespository } from "../repository/EmployeeRepository";
 import { ErrorCodes } from "../util/errorCode";
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
@@ -19,8 +19,6 @@ export class EmployeeService{
     }
 
 
-
-
     public async createEmployee(employeeDetails: CreateEmployeeDto) {
         try {
 
@@ -35,9 +33,6 @@ export class EmployeeService{
         });
 
         //console.log(newAddress);
-
-
-
             const newEmployee = plainToClass(Employee, {
                  name: employeeDetails.name,
                  password: employeeDetails.password ? await bcrypt.hash(employeeDetails.password,10):'',
@@ -63,7 +58,7 @@ export class EmployeeService{
         try {
 
           const employee= await this.employeeRepo.getEmployeeById(employeeId);
-          
+
           const newAddress = plainToClass(Address, {
             id:(employee).addressId,
             addressLine1: employeeDetails.address.addressLine1,
@@ -72,7 +67,7 @@ export class EmployeeService{
             state:employeeDetails.address.state,
             country:employeeDetails.address.country,
             zip:employeeDetails.address.zip
-            // isActive: true,
+            
         });
 
         const newEmployee = plainToClass(Employee, {
@@ -87,24 +82,27 @@ export class EmployeeService{
           status:employeeDetails.status,
           joiningDate:employeeDetails.joiningDate
 
-         // isActive: true,
+        
      });
             const save = await this.employeeRepo.updateEmployeeDetails(employeeId,newEmployee);
             return save;
         } catch (err) {
-            //throw new HttpException(400, "Failed to create employee");
+          throw new EntityNotFoundException(ErrorCodes.EMPLOYEE_WITH_ID_NOT_FOUND);
         }
     }
 
-    async getEmployee(){
+
+    async getAllEmployee(){
 
         return await this.employeeRepo.getAllEmployees();
     }
+
 
     async softdeleteEmployeeById(employeeId : string){
 
         return await this.employeeRepo.softdeleteEmployeeById(employeeId);
     }
+
 
     async getEmployeeById(employeeId : string){
         const employee = await this.employeeRepo.getEmployeeById(employeeId);
@@ -116,12 +114,13 @@ export class EmployeeService{
         return employee;
     }
 
+
     public employeeLogin = async (
-        name: string,
+        username: string,
         password: string
       ) => {
         const employeeDetails = await this.employeeRepo.getEmployeeByUsername(
-          name
+          username
         );
         if (!employeeDetails) {
           throw new UserNotAuthorizedException(ErrorCodes.UNAUTHORIZED);

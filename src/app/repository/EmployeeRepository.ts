@@ -31,6 +31,8 @@ export class EmployeeRespository{
         const employeeRepo = getConnection().getRepository(Employee);
         return employeeRepo.findOne(id,{ relations:relations});
     }
+
+    
 //     async getEmployeeById(employeeId : any){
 //         const employeeRepo = getConnection().getRepository(Employee);
 //         const data=await employeeRepo.findOne( {id: employeeId});
@@ -44,10 +46,10 @@ export class EmployeeRespository{
    return data
 }
 
-public async getEmployeeByUsername(name: string) {
+public async getEmployeeByUsername(username: string) {
     const employeeRepo = getConnection().getRepository(Employee);
     const employeeDetail = await employeeRepo.findOne({
-        where: { name },
+        where: { username },
     });
     return employeeDetail;
 }

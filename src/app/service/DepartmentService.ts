@@ -2,13 +2,14 @@ import { plainToClass } from "class-transformer";
 import { CreateDepartmentDto } from "../dto/CreateDepartment";
 import { Department } from "../entities/Department";
 import HttpException from "../exception/HttpException";
-import { DepartmentRespository } from "../repository/departmentRepository";
+import { DepartmentRespository } from "../repository/DepartmentRepository";
 
 export class DepartmentService{
 
     constructor(private departmentRepo : DepartmentRespository){
 
     }
+
 
     async softdeleteDepartmentById(employeeId : string){
 
@@ -25,8 +26,7 @@ export class DepartmentService{
           
           
             });
-            //console.log(departmentDetails);
-            //console.log(newDepartment);
+            
 
             const save = await this.departmentRepo.saveDepartmentDetails(newDepartment);
             return save;
@@ -34,6 +34,7 @@ export class DepartmentService{
             //throw new HttpException(400, "Failed to create department");
         }
     }
+
 
     public async updateDepartment(departmentId:string,departmentDetails: CreateDepartmentDto) {
         try {
@@ -54,6 +55,7 @@ export class DepartmentService{
             //throw new HttpException(400, "Failed to create department");
         }
     }
+    
 
     async getDepartment(){
 

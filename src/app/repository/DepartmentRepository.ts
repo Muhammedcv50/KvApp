@@ -4,19 +4,19 @@ import { Department } from "../entities/Department";
 export class DepartmentRespository{
 
 
-    public async saveDepartmentDetails(departmentDetails: Department) {
+    public async saveDepartmentDetails(departmentDetails: Department): Promise<Department> {
         const departmentRepo = getConnection().getRepository(Department);
         return departmentRepo.save(departmentDetails);
     }
 
 
-    async softdeleteDepartmentById(departmentId : any){
+    async softdeleteDepartmentById(departmentId : string){
         const departmentRepo = getConnection().getRepository(Department);
         const data=await departmentRepo.softDelete( {id: departmentId});
        return data
     }
 
-    public async updateDepartmentDetails(departmentId: string, departmentDetails: any) {
+    public async updateDepartmentDetails(departmentId: string, departmentDetails: Department) {
         const departmentRepo = getConnection().getRepository(Department);
         //console.log(departmentId);
         const updateDepartmentDetails = await departmentRepo.update(departmentId,departmentDetails );
@@ -25,9 +25,6 @@ export class DepartmentRespository{
 
     async getAllDepartments(){
          const departmentRepo = getConnection().getRepository(Department);
-        // const data=await departmentRepo.find();
-        //console.log(data);
-
         return departmentRepo.find();
     }
     }

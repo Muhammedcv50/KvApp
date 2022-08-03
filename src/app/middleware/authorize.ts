@@ -19,14 +19,20 @@ const authorize = (permittedRoles: string[]) => {
       const data = jsonwebtoken.decode(token);
       
       const decodedata = JSON.parse(JSON.stringify(data));
+      console.log(permittedRoles);
+      if (!(permittedRoles.includes(decodedata.role))) 
+        throw new UserNotAuthorizedException(ErrorCodes.UNAUTHORIZED);
+       return next();
 
-      if(!(permittedRoles.includes(decodedata.role)))
-      return next();
-    } catch (error) {
+    } 
+    catch (error) {
       return next(new UserNotAuthorizedException(ErrorCodes.UNAUTHORIZED));
     }
+
+    
   };
 };
+
 
 const getTokenFromRequestHeader = (req: RequestWithUser) => {
   const tokenWithBearerHeader = req.header(

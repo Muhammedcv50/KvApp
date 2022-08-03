@@ -5,26 +5,35 @@ import APP_CONSTANTS from "../constants";
 import { DepartmentService } from "../service/DepartmentService";
 import validationMiddleware from "../middleware/validationMiddelware";
 import { CreateDepartmentDto } from "../dto/CreateDepartment";
+import authorize from "../middleware/authorize";
+
 
 class DepartmentController extends AbstractController {
+
   constructor(private departmentService: DepartmentService) {
     super(`${APP_CONSTANTS.apiPrefix}/department`);
     this.initializeRoutes();
   }
+
   protected initializeRoutes() {
-    this.router.get(`${this.path}`, this.getDepartment);
+    this.router.get(`${this.path}`, 
+    //authorize(['admin','superAdmin']),    // view rights given
+    this.getDepartment);
     
     this.router.post(
         `${this.path}`,
+        authorize(['admin','superAdmin']),
         validationMiddleware(CreateDepartmentDto, APP_CONSTANTS.body),
         this.createDepartment
       );
 
 
-    this.router.delete(`${this.path}/:id`, this.deleteDepartmentById);
+    this.router.delete(`${this.path}/:id`, authorize(['admin','superAdmin']),this.deleteDepartmentById);
 
     this.router.put(
       `${this.path}/:id`,
+      authorize(['admin','superAdmin']),
+      validationMiddleware(CreateDepartmentDto, APP_CONSTANTS.body),
       this.updateDepartment
     );
 
@@ -45,6 +54,7 @@ class DepartmentController extends AbstractController {
       next(err);
     }
   }
+
   
   private getDepartment = async (request: RequestWithUser, response: Response, next: NextFunction) => {
     try {
@@ -73,6 +83,7 @@ class DepartmentController extends AbstractController {
     }
   }
 
+
   private deleteDepartmentById = async (request: RequestWithUser, response: Response, next: NextFunction) => {
     try {
       const data: any = await this.departmentService.softdeleteDepartmentById(request.params.id);
@@ -82,6 +93,7 @@ class DepartmentController extends AbstractController {
       return next(error);
     }
   }
+  
 }
 
 export default DepartmentController;
