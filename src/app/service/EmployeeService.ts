@@ -10,6 +10,7 @@ import UserNotAuthorizedException from "../exception/UserNotAuthorizedException"
 import IncorrectUsernameOrPasswordException from "../exception/IncorrectUsernameOrPasswordException";
 import { Address } from "../entities/Address";
 import { CreateEmployeeDto } from "../dto/CreateEmployee";
+import e from "express";
 
 
 export class EmployeeService{
@@ -50,7 +51,8 @@ export class EmployeeService{
             
             return save;
         } catch (err) {
-            //throw new HttpException(400, "Failed to create employee");
+            throw new HttpException(400,"failed to create employee");
+              e//rrorDetail.MESSAGE,errorDetail.CODE,errors
         }
     }
 
