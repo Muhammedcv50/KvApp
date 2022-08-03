@@ -10,6 +10,18 @@ export class DepartmentRespository{
     }
 
 
+    async softdeleteDepartmentById(departmentId : any){
+        const departmentRepo = getConnection().getRepository(Department);
+        const data=await departmentRepo.softDelete( {id: departmentId});
+       return data
+    }
+
+    public async updateDepartmentDetails(departmentId: string, departmentDetails: any) {
+        const departmentRepo = getConnection().getRepository(Department);
+        //console.log(departmentId);
+        const updateDepartmentDetails = await departmentRepo.update(departmentId,departmentDetails );
+        return updateDepartmentDetails;
+    }
 
     async getAllDepartments(){
          const departmentRepo = getConnection().getRepository(Department);

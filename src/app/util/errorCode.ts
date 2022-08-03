@@ -6,12 +6,16 @@ export const ErrorCodes: { [key: string]: CustomError } = {
         CODE: "UNAUTHORIZED",
         MESSAGE: "User is not allowed to perform this operation",
     },
+    INCORRECT_CREDENTIAL: {
+        CODE: "    INCORRECT_CREDENTIAL",
+        MESSAGE: "Incorrect username or password",
+    },
     USER_NOT_FOUND: {
         CODE: "USER_NOT_FOUND",
         MESSAGE: "User not found",
     },
-    USER_WITH_ID_NOT_FOUND: {
-        CODE: "USER_WITH_ID_NOT_FOUND",
+    EMPLOYEE_WITH_ID_NOT_FOUND: {
+        CODE: "EMPLOYEE_WITH_ID_NOT_FOUND",
         MESSAGE: "User with given id not found",
     },
     VALIDATION_ERROR: {

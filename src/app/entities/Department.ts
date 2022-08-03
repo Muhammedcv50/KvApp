@@ -6,8 +6,13 @@ import { Employee } from "./Employee";
     export class Department extends AbstractEntity {
         @PrimaryGeneratedColumn("uuid")
         public id: string;
+
         @Column({ nullable: false })
-        public dept_name: string;
+        public name: string;
+
+        @Column({ nullable: false })
+        public numberOfEmployees: number;
+
 
         @OneToMany(() => Employee, (employee) => employee.department)
     @JoinColumn()

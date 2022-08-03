@@ -3,6 +3,8 @@ import { NextFunction, Response } from "express";
 import RequestWithUser from "../util/rest/request";
 import APP_CONSTANTS from "../constants";
 import { DepartmentService } from "../service/DepartmentService";
+import validationMiddleware from "../middleware/validationMiddelware";
+import { CreateDepartmentDto } from "../dto/CreateDepartment";
 
 class DepartmentController extends AbstractController {
   constructor(private departmentService: DepartmentService) {
@@ -14,9 +16,17 @@ class DepartmentController extends AbstractController {
     
     this.router.post(
         `${this.path}`,
-        
+        validationMiddleware(CreateDepartmentDto, APP_CONSTANTS.body),
         this.createDepartment
       );
+
+
+    this.router.delete(`${this.path}/:id`, this.deleteDepartmentById);
+
+    this.router.put(
+      `${this.path}/:id`,
+      this.updateDepartment
+    );
 
   }
 
@@ -27,6 +37,7 @@ class DepartmentController extends AbstractController {
   ) => {
     try {
       const data = await this.departmentService.createDepartment(request.body);
+      //console.log(request.body);
       response.send(
         this.fmt.formatResponse(data, Date.now() - request.startTime, "OK")
       );
@@ -38,6 +49,33 @@ class DepartmentController extends AbstractController {
   private getDepartment = async (request: RequestWithUser, response: Response, next: NextFunction) => {
     try {
       const data: any = await this.departmentService.getDepartment();
+      response.status(200);
+      response.send(this.fmt.formatResponse(data, Date.now() - request.startTime, "OK", 1));
+    } catch (error) {
+      return next(error);
+    }
+  }
+
+
+  private updateDepartment = async (
+    request: RequestWithUser,
+    response: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const data = await this.departmentService.updateDepartment(request.params.id,request.body);
+      response.send(
+        this.fmt.formatResponse(data, Date.now() - request.startTime, "OK")
+      );
+      console.log(request.body);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  private deleteDepartmentById = async (request: RequestWithUser, response: Response, next: NextFunction) => {
+    try {
+      const data: any = await this.departmentService.softdeleteDepartmentById(request.params.id);
       response.status(200);
       response.send(this.fmt.formatResponse(data, Date.now() - request.startTime, "OK", 1));
     } catch (error) {
