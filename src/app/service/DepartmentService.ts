@@ -31,7 +31,7 @@ export class DepartmentService{
             const save = await this.departmentRepo.saveDepartmentDetails(newDepartment);
             return save;
         } catch (err) {
-            //throw new HttpException(400, "Failed to create department");
+           throw new HttpException(400, "Failed to create department");
         }
     }
 
@@ -47,12 +47,12 @@ export class DepartmentService{
             numberOfEmployees:departmentDetails.numberOfEmployees
           
 
-         // isActive: true,
+         
      });
             const save = await this.departmentRepo.updateDepartmentDetails(departmentId,newDepartment);
             return save;
         } catch (err) {
-            //throw new HttpException(400, "Failed to create department");
+            throw new HttpException(400, "Failed to update department");
         }
     }
     
