@@ -52,7 +52,7 @@ export class EmployeeService{
             return save;
         } catch (err) {
             throw new HttpException(400,"failed to create employee");
-              e//rrorDetail.MESSAGE,errorDetail.CODE,errors
+             
         }
     }
 
@@ -89,7 +89,8 @@ export class EmployeeService{
             const save = await this.employeeRepo.updateEmployeeDetails(employeeId,newEmployee);
             return save;
         } catch (err) {
-          throw new EntityNotFoundException(ErrorCodes.EMPLOYEE_WITH_ID_NOT_FOUND);
+          throw new HttpException(400,"failed to update the employee");
+
         }
     }
 
